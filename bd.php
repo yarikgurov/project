@@ -1,12 +1,10 @@
 <?php
 require_once 'csrf_protection.php';
 
-// Настройка SQLite
 try {
     $pdo = new PDO('sqlite:notes.sqlite');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    // Инициализация таблиц
     $pdo->exec("CREATE TABLE IF NOT EXISTS notes (
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         title TEXT, 
@@ -17,10 +15,8 @@ try {
     die("Ошибка БД: " . $e->getMessage());
 }
 
-// Логика сохранения
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    // Проверка токена: вызываем метод нашего класса
     if (!Csrf::validate($_POST['csrf_token'] ?? '')) {
         header('HTTP/1.1 403 Forbidden');
         die("<h1>403 Forbidden</h1><p>Защита CSRF: Токен не прошел проверку.</p>");
