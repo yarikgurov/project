@@ -1,17 +1,13 @@
 {
-  "name": "Заметки",
-  "short_name": "Заметки",
-  "description": "Простое приложение для заметок с localStorage",
-  "start_url": "/index.html",
+  "name": "PWA",
+  "short_name": "Offline PWA",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#667eea",
-  "theme_color": "#6c63ff",
-  "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+  "background_color": "#f0f0f3",
+  "theme_color": "#6c7f6e",
+  "icons": [{
+    "src": "./icon.svg",
+    "sizes": "any",
+    "type": "image/svg+xml"
+  }]
 }
