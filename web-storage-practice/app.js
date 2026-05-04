@@ -1,39 +1,66 @@
-const KEY = 'my-note';
+const KEY = 'my-notes';
 
-const noteEl = document.getElementById('note');
+const noteInput = document.getElementById('note');
 const saveBtn = document.getElementById('saveBtn');
 const clearBtn = document.getElementById('clearBtn');
-const statusText = document.querySelector('#status');
-const checkBtn = document.querySelector('#checkBtn');
+const checkBtn = document.getElementById('checkBtn');
+const statusText = document.getElementById('status');
+const notesList = document.getElementById('notesList');
+
+function getNotes() {
+  return JSON.parse(localStorage.getItem(KEY) || '[]');
+}
+
+function saveNotes(notes) {
+  localStorage.setItem(KEY, JSON.stringify(notes));
+}
+
+function renderNotes() {
+  const notes = getNotes();
+  notesList.innerHTML = '';
+  notes.forEach((text, i) => {
+    const li = document.createElement('li');
+    li.textContent = text;
+    const del = document.createElement('button');
+    del.textContent = 'Удалить';
+    del.onclick = () => {
+      const updated = getNotes();
+      updated.splice(i, 1);
+      saveNotes(updated);
+      renderNotes();
+    };
+    li.appendChild(del);
+    notesList.appendChild(li);
+  });
+}
 
 window.addEventListener('load', () => {
-  const saved = localStorage.getItem(KEY);
-  if (saved) {
-    noteEl.value = saved;
-  }
+  renderNotes();
 });
 
 saveBtn.addEventListener('click', () => {
-  localStorage.setItem(KEY, noteEl.value);
+  const text = noteInput.value.trim();
+  if (!text) return;
+  const notes = getNotes();
+  notes.push(text);
+  saveNotes(notes);
+  noteInput.value = '';
+  renderNotes();
 });
 
 clearBtn.addEventListener('click', () => {
   localStorage.removeItem(KEY);
-  noteEl.value = '';
+  noteInput.value = '';
+  renderNotes();
 });
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
     .register('./sw.js')
-    .then(reg => {
-      statusText.textContent = 'SW зарегистрирован';
-    })
-    .catch(err => {
-      statusText.textContent = 'Запустите через localhost!';
-    });
+    .then(() => { statusText.textContent = 'SW зарегистрирован'; })
+    .catch(() => { statusText.textContent = 'Запустите через localhost!'; });
 }
 
 checkBtn.addEventListener('click', () => {
-  statusText.textContent =
-    navigator.onLine ? 'Сеть есть' : 'Офлайн!';
+  statusText.textContent = navigator.onLine ? 'Сеть есть' : 'Офлайн!';
 });
