@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Заявки выездного специалиста</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Шапка -->
+  <header class="header">
+    <div class="header-left">
+      <h1>Заявки</h1>
+    </div>
+    <div class="header-right">
+      <span id="statusIndicator" class="status-indicator offline">● Офлайн</span>
+      <button id="syncBtn" class="btn btn-sync" title="Синхронизировать">⟳ Синхр.</button>
+      <button id="addBtn" class="btn btn-primary">+ Новая заявка</button>
+    </div>
+  </header>
+
+  <!-- Фильтры -->
+  <div class="filters">
+    <select id="filterStatus" class="filter-select">
+      <option value="">Все статусы</option>
+      <option value="new">Новая</option>
+      <option value="in-progress">В работе</option>
+      <option value="done">Выполнена</option>
+    </select>
+    <select id="filterPriority" class="filter-select">
+      <option value="">Все приоритеты</option>
+      <option value="high">Высокий</option>
+      <option value="medium">Средний</option>
+      <option value="low">Низкий</option>
+    </select>
+    <span id="unsyncedBadge" class="unsynced-badge hidden">⚠ Несинхр.: <b id="unsyncedCount">0</b></span>
+  </div>
+
+  <!-- Список заявок -->
+  <main class="main">
+    <div id="requestsList" class="requests-list">
+      <div class="empty-state">Загрузка заявок...</div>
+    </div>
+  </main>
+
+  <!-- Модальное окно формы -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Новая заявка</h2>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <form id="requestForm" class="form" novalidate>
+        <input type="hidden" id="editId" />
+        <div class="form-group">
+          <label for="inputTitle">Название *</label>
+          <input type="text" id="inputTitle" placeholder="Кратко опишите проблему" required />
+          <span class="error-msg" id="errorTitle"></span>
+        </div>
+        <div class="form-group">
+          <label for="inputDescription">Описание</label>
+          <textarea id="inputDescription" placeholder="Подробнее о задаче..." rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="inputLocation">Место</label>
+          <input type="text" id="inputLocation" placeholder="Аудитория, объект, комната..." />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inputStatus">Статус</label>
+            <select id="inputStatus">
+              <option value="new">Новая</option>
+              <option value="in-progress">В работе</option>
+              <option value="done">Выполнена</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="inputPriority">Приоритет</label>
+            <select id="inputPriority">
+              <option value="high">Высокий</option>
+              <option value="medium" selected>Средний</option>
+              <option value="low">Низкий</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="cancelBtn">Отмена</button>
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Карточка (детали заявки) -->
+  <div id="cardModal" class="modal hidden">
+    <div class="modal-overlay" id="cardOverlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Заявка</h2>
+        <button class="modal-close" id="cardClose">✕</button>
+      </div>
+      <div id="cardContent"></div>
+      <div class="form-actions">
+        <button class="btn btn-danger" id="cardDeleteBtn">Удалить</button>
+        <button class="btn btn-secondary" id="cardEditBtn">Редактировать</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
